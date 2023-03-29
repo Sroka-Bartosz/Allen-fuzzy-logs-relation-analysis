@@ -1,0 +1,64 @@
+check if sufficient information is available check if sufficient information is available                                                                                                        {}
+check if sufficient information is available                               register claim                                                                                               {'mi': 1.0}
+check if sufficient information is available                determine likelihood of claim                                                                                                {'>': 1.0}
+check if sufficient information is available                                 assess claim                                                                                                {'>': 1.0}
+check if sufficient information is available                             initiate payment                                                                                                        {}
+check if sufficient information is available             advise claimant on reimbursement                                                                                                        {}
+check if sufficient information is available                                  close claim                                                                                                        {}
+check if sufficient information is available                                          end                                                                                                        {}
+                              register claim check if sufficient information is available                                                                                                {'m': 1.0}
+                              register claim                               register claim                                                                                                        {}
+                              register claim                determine likelihood of claim                                                                                               {'mi': 1.0}
+                              register claim                                 assess claim                                                       {'>': 0.98989898989899, 'mi': 0.010101010101010102}
+                              register claim                             initiate payment                                                                                                {'>': 1.0}
+                              register claim             advise claimant on reimbursement                                                                                                {'>': 1.0}
+                              register claim                                  close claim                                                                                                        {}
+                              register claim                                          end                                                                                                        {}
+               determine likelihood of claim check if sufficient information is available                                                                                                {'<': 1.0}
+               determine likelihood of claim                               register claim                                                                                                {'m': 1.0}
+               determine likelihood of claim                determine likelihood of claim                                                                                                        {}
+               determine likelihood of claim                                 assess claim                                                      {'si': 0.010101010101010102, 'mi': 0.98989898989899}
+               determine likelihood of claim                             initiate payment                                                                                                {'>': 1.0}
+               determine likelihood of claim             advise claimant on reimbursement                                                                                                {'>': 1.0}
+               determine likelihood of claim                                  close claim                                                                                                {'>': 1.0}
+               determine likelihood of claim                                          end                                                                                                        {}
+                                assess claim check if sufficient information is available                                                                                                {'<': 1.0}
+                                assess claim                               register claim                                                        {'m': 0.010101010101010102, '<': 0.98989898989899}
+                                assess claim                determine likelihood of claim                                                       {'m': 0.98989898989899, 'si': 0.010101010101010102}
+                                assess claim                                 assess claim                                                                                                        {}
+                                assess claim                             initiate payment                                                        {'>': 0.631578947368421, 'mi': 0.3684210526315789}
+                                assess claim             advise claimant on reimbursement                                                        {'>': 0.3684210526315789, 'mi': 0.631578947368421}
+                                assess claim                                  close claim                                                                                                {'>': 1.0}
+                                assess claim                                          end                                                                                                        {}
+                            initiate payment check if sufficient information is available                                                                                                        {}
+                            initiate payment                               register claim                                                                                                {'<': 1.0}
+                            initiate payment                determine likelihood of claim                                                                                                {'<': 1.0}
+                            initiate payment                                 assess claim                                                         {'m': 0.3684210526315789, '<': 0.631578947368421}
+                            initiate payment                             initiate payment                                                                                                        {}
+                            initiate payment             advise claimant on reimbursement                             {'m': 0.631578947368421, '>': 0.15789473684210525, 'mi': 0.21052631578947367}
+                            initiate payment                                  close claim                                                      {'>': 0.19736842105263158, 'mi': 0.8026315789473685}
+                            initiate payment                                          end                                                                                                        {}
+            advise claimant on reimbursement check if sufficient information is available                                                                                                        {}
+            advise claimant on reimbursement                               register claim                                                                                                {'<': 1.0}
+            advise claimant on reimbursement                determine likelihood of claim                                                                                                {'<': 1.0}
+            advise claimant on reimbursement                                 assess claim                                                         {'m': 0.631578947368421, '<': 0.3684210526315789}
+            advise claimant on reimbursement                             initiate payment                             {'m': 0.21052631578947367, '<': 0.15789473684210525, 'mi': 0.631578947368421}
+            advise claimant on reimbursement             advise claimant on reimbursement                                                                                                        {}
+            advise claimant on reimbursement                                  close claim {'m': 0.15789473684210525, '>': 0.631578947368421, 'si': 0.013157894736842105, 'mi': 0.19736842105263158}
+            advise claimant on reimbursement                                          end                                                                                                        {}
+                                 close claim check if sufficient information is available                                                                                                        {}
+                                 close claim                               register claim                                                                                                        {}
+                                 close claim                determine likelihood of claim                                                                                                {'<': 1.0}
+                                 close claim                                 assess claim                                                                                                {'<': 1.0}
+                                 close claim                             initiate payment                                                       {'m': 0.8026315789473685, '<': 0.19736842105263158}
+                                 close claim             advise claimant on reimbursement {'m': 0.19736842105263158, 'si': 0.013157894736842105, 'mi': 0.15789473684210525, '<': 0.631578947368421}
+                                 close claim                                  close claim                                                                                                        {}
+                                 close claim                                          end                                                                                                        {}
+                                         end check if sufficient information is available                                                                                                        {}
+                                         end                               register claim                                                                                                        {}
+                                         end                determine likelihood of claim                                                                                                        {}
+                                         end                                 assess claim                                                                                                        {}
+                                         end                             initiate payment                                                                                                        {}
+                                         end             advise claimant on reimbursement                                                                                                        {}
+                                         end                                  close claim                                                                                                        {}
+                                         end                                          end                                                                                                        {}
