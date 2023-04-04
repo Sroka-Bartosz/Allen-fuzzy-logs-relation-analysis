@@ -1,0 +1,6 @@
+'minimal_date_in_generated_logs': '2010-01-01'
+'maximal_date_in_generated_logs': '2015-01-01'
+'level_of_differentiation_of_events': 0.5
+'number_of_traces': 100
+'first_task_duration': 0.2
+'second_task_duration': 0.8
