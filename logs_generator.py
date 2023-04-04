@@ -269,7 +269,6 @@ class WrongOptionException(Exception):
 def create_logs_generator(logs_generation_type: str, params: Dict) -> Union[
         Generate_meets, Generate_starts, Generate_before, Generate_overlaps, Generate_contains, Generate_equals]:
     options = list(Generator.keys())
-    print(options)
 
     try:
         if logs_generation_type not in options:
