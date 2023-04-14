@@ -1,19 +1,32 @@
-import matplotlib.pyplot as plt
+from typing import List
+import pandas as pd
 
 
-def plot_log_times(df):
-    fig, ax = plt.subplots(figsize=(14, 6))
-    ax.plot(df[['start_timestamp', 'complete_timestamp']], df['case:concept:name'], alpha=0.5,
-            label=['Start_date', 'End_date'])
+# Function to prepare logs before import to main class
+def convert_logs_to_start_complete_by_status(df: pd.DataFrame, status: str, timestamp: str,
+                                             status_cols: List[str]) -> pd.DataFrame:
+    """
+    from column timestamp and status [complete, start] generate a new two column start_timestamp and end_timestamp
+    """
+    df['start_timestamp'] = df.loc[df[status] == status_cols[0], timestamp]
+    df['complete_timestamp'] = df.loc[df[status] == status_cols[1], timestamp]
+    df.drop([status, timestamp], axis=1, inplace=True)
+    return df
 
-    plt.legend()
-    plt.show()
+
+def grouped_start_complete_timestamp_to_one_row(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    grouped two rows first like [NaT, complete_timestamp] and second like [start_timestamp, NaT]
+    to one row [start_timestamp, complete_timestamp]
+    """
+    # choose column to be grouped - start_timestamp and complete_timestamp
+    columns_grouped = [col for col in df.columns.values if (col != 'start_timestamp' and col != 'complete_timestamp')]
+    grouped = df.groupby(columns_grouped, as_index=False)
+
+    # Columns aggregation using first and last argument
+    return grouped.agg({'start_timestamp': 'first', 'complete_timestamp': 'last'})
 
 
-def plot_only_lines(df):
-    fig, ax = plt.subplots(figsize=[14, 6])
-    for i in range(df.shape[0] - 1):
-        ax.plot([df['start_timestamp'][i], df['complete_timestamp'][i]],
-                [df['case:concept:name'][i], df['case:concept:name'][i]], 'r-')
-    ax.get_yaxis().set_visible(False)
-    plt.show()
+def prepare_logs(df: pd.DataFrame, status: str, timestamp: str, status_cols: List[str]) -> pd.DataFrame:
+    return grouped_start_complete_timestamp_to_one_row(
+        df=convert_logs_to_start_complete_by_status(df=df, status=status, timestamp=timestamp, status_cols=status_cols))
