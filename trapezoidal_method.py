@@ -49,7 +49,8 @@ class TrapezoidMethod:
 
     def gets_tasks_names_in_time_relation(self) -> List[str]:
         # dodać funkcję sortującą taski w kolejności występowania
-        return self.two_logs_dataframe[self.task_column_name].unique()
+        task_means = self.two_logs_dataframe.groupby(self.task_column_name)[self.start_timestamp_column_name].mean()
+        return task_means.sort_values().index.values
 
     def update_range_of_timestamp(self) -> None:
         self.minimum_start_timestamp = self.two_logs_dataframe[
@@ -57,27 +58,7 @@ class TrapezoidMethod:
         self.maximum_complete_timestamp = self.two_logs_dataframe[
                                               self.complete_timestamp_column_name].max() + dt.timedelta(10)
 
-    def moved_logs_to_side(self):
-        # first_task, second_task = self.gets_tasks_names_in_time_relation()
-        # min_first_task_complete_timestamp = np.min(self.two_logs_dataframe.complete_timestamp)
-        #
-        # for i in self.two_logs_dataframe[self.case_id_column_name].unique():
-        #     case1 = ((self.two_logs_dataframe[self.case_id_column_name] == i) & (
-        #             self.two_logs_dataframe[self.task_column_name] == first_task))
-        #     case2 = ((self.two_logs_dataframe[self.case_id_column_name] == i) & (
-        #             self.two_logs_dataframe[self.task_column_name] == second_task))
-        #
-        #     diff = min_first_task_complete_timestamp - pd.to_datetime(self.two_logs_dataframe[case1].complete_timestamp)
-        #
-        #     self.two_logs_dataframe.loc[case1, 'start_timestamp'] = self.two_logs_dataframe.loc[
-        #                                                                 case1, 'start_timestamp'] + diff.item()
-        #     self.two_logs_dataframe.loc[case2, 'start_timestamp'] = self.two_logs_dataframe.loc[
-        #                                                                 case2, 'start_timestamp'] + diff.item()
-        #     self.two_logs_dataframe.loc[case1, 'complete_timestamp'] = self.two_logs_dataframe.loc[
-        #                                                                    case1, 'complete_timestamp'] + diff.item()
-        #     self.two_logs_dataframe.loc[case2, 'complete_timestamp'] = self.two_logs_dataframe.loc[
-        #                                                                    case2, 'complete_timestamp'] + diff.item()
-
+    def moved_logs_to_side(self) -> None:
         first_task, second_task = self.gets_tasks_names_in_time_relation()
         min_first_task_complete_timestamp = np.min(self.two_logs_dataframe.complete_timestamp)
 
@@ -181,8 +162,9 @@ class TrapezoidMethod:
             colors = [generate_random_color() for _ in range(len(self.list_of_tasks))]
 
         fig, ax = plt.subplots(figsize=[14, 6])
-        for task_idx in range(len(self.list_of_tasks)):
-            self.plot_task_duration(ax=ax, color=colors[task_idx], label=self.list_of_tasks[task_idx])
+        for task_idx in range(len(self.gets_tasks_names_in_time_relation())):
+            self.plot_task_duration(ax=ax, color=colors[task_idx],
+                                    label=self.gets_tasks_names_in_time_relation()[task_idx])
         handles, labels = ax.get_legend_handles_labels()
         unique_labels = list(set(labels))
         legend_handles = []
@@ -195,15 +177,22 @@ class TrapezoidMethod:
         plt.tight_layout()
         plt.show()
 
-    def core_metod(self, first_task: str, second_task: str, plot_steps: bool = False, plot_results: bool = False,
+    def core_metod(self,
+                   first_task: str,
+                   second_task: str,
+                   instance: str = None,
+                   plot_steps: bool = False,
+                   plot_results: bool = False,
                    print_results: bool = False):
-        self.prepare_dataframe_with_two_tasks_to_compare(first_task, second_task)
-        if plot_steps: self.plot_tasks(colors=['red', 'blue'])
+        self.prepare_dataframe_with_two_tasks_to_compare(first_task, second_task, instance)
+        if plot_steps:
+            self.plot_tasks(colors=['red', 'blue'])
         self.moved_logs_to_side()
-        if plot_steps: self.plot_tasks(colors=['red', 'blue'])
+        if plot_steps:
+            self.plot_tasks(colors=['red', 'blue'])
         area_first_task, area_second_task, area_splot = self.calculate_timestamp_metrics(plot_result=plot_results)
         if print_results: self.print_results(area_first_task, area_second_task, area_splot)
-        return area_splot / area_first_task, area_splot / area_second_task
+        return return_possible_relation(area_splot / area_first_task, area_splot / area_second_task)
 
 
 def generate_function(points):
@@ -229,17 +218,18 @@ def generate_random_color():
     return r / 255.0, g / 255.0, b / 255.0
 
 
-if __name__ == "__main__":
-    generated_logs = generate_logs('before')
-
-    list_of_times = []
-    list_of_fraction = [x for x in np.logspace(-2, 0, 100) if x > 0.05]
-    for frac in list_of_fraction:
-        t = TrapezoidMethod(logs=generated_logs.sample(frac=frac, random_state=42))
-        start_time = time.time()
-        p1, p2 = t.core_metod('A', 'B')
-        execution_time = time.time() - start_time
-        print(".", end="")
-        list_of_times.append(execution_time)
-    plt.plot(list_of_fraction, list_of_times)
-    plt.show()
+def return_possible_relation(p_value1: float, p_value2: float) -> List[str]:
+    if p_value1 == 0 and p_value2 == 0:
+        possible_relations = ['meets', 'before']
+    elif p_value1 == 1:
+        if p_value2 == 1:
+            possible_relations = ['equals']
+        else:
+            possible_relations = ['contains', 'starts']
+    elif (p_value1 == 1 and p_value2 <= 0.9) or (p_value1 <= 0.9 and p_value2 == 1):
+        possible_relations = ['contains', 'starts']
+    elif 0 < p_value1 <= 0.9 and 0 < p_value2 <= 0.9:
+        possible_relations = ['meets', 'starts', 'overlaps']
+    else:
+        possible_relations = ['meets', 'starts', 'before', 'overlaps', 'contains', 'equals']
+    return possible_relations
