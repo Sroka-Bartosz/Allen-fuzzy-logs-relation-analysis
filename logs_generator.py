@@ -69,7 +69,7 @@ class Generate_meets(LogsGenerator):
                 {'case_id': i, 'task_name': 'B', 'start_timestamp': complete_a, 'complete_timestamp': complete_b},
                 ignore_index=True)
             if i % 100:
-                print("\r{}%".format(round(100 * i / self.number_of_traces, 2)), end='')
+                print("\r{}%".format(round(100 * i / self.number_of_traces, 1)), end='')
         return self.generated_df
 
 
@@ -107,7 +107,7 @@ class Generate_starts(LogsGenerator):
                  'complete_timestamp': np.max([complete_a, complete_b])},
                 ignore_index=True)
             if i % 100:
-                print("\r{}%".format(round(100 * i / self.number_of_traces, 2)), end='')
+                print("\r{}%".format(round(100 * i / self.number_of_traces, 1)), end='')
         return self.generated_df
 
 
@@ -147,7 +147,7 @@ class Generate_contains(LogsGenerator):
                  'complete_timestamp': np.min([complete_a, complete_b])},
                 ignore_index=True)
             if i % 100:
-                print("\r{}%".format(round(100 * i / self.number_of_traces, 2)), end='')
+                print("\r{}%".format(round(100 * i / self.number_of_traces, 1)), end='')
         return self.generated_df
 
 
@@ -184,7 +184,7 @@ class Generate_before(LogsGenerator):
                 {'case_id': i, 'task_name': 'B', 'start_timestamp': start_b, 'complete_timestamp': complete_b},
                 ignore_index=True)
             if i % 100:
-                print("\r{}%".format(round(100 * i / self.number_of_traces, 2)), end='')
+                print("\r{}%".format(round(100 * i / self.number_of_traces, 1)), end='')
         return self.generated_df
 
 
@@ -221,7 +221,7 @@ class Generate_overlaps(LogsGenerator):
                 {'case_id': i, 'task_name': 'B', 'start_timestamp': start_b, 'complete_timestamp': complete_b},
                 ignore_index=True)
             if i % 100:
-                print("\r{}%".format(round(100 * i / self.number_of_traces, 2)), end='')
+                print("\r{}%".format(round(100 * i / self.number_of_traces, 1)), end='')
         return self.generated_df
 
 
@@ -256,7 +256,7 @@ class Generate_equals(LogsGenerator):
                 {'case_id': i, 'task_name': 'B', 'start_timestamp': start_a, 'complete_timestamp': complete_a},
                 ignore_index=True)
             if i % 100:
-                print("\r{}%".format(round(100 * i / self.number_of_traces, 2)), end='')
+                print("\r{}%".format(round(100 * i / self.number_of_traces, 1)), end='')
         return self.generated_df
 
 
