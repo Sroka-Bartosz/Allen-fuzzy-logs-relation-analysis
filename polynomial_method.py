@@ -14,12 +14,6 @@ from matplotlib.patches import Rectangle
 from typing import Tuple, List, Any, Dict, Optional
 from datetime import datetime
 
-# PROJECT PACKAGES
-from logs_generator import generate_logs
-
-# TURN WARNINGS OFF
-# warnings.filterwarnings("ignore")
-
 
 # CLASSES
 class PolynomialMethod:
@@ -152,7 +146,9 @@ class PolynomialMethod:
 
     def calculate_timestamp_metrics(self, task1, task2, timestamps1, frequencies1, timestamps2, frequencies2, colors,
                                     plot_result: bool = False) -> Tuple[float, float, float]:
-        fig = plt.figure(figsize=(30, 10))
+        if plot_result:
+            fig = plt.figure(figsize=(30, 10))
+
         task_list = [task1, task2]
         timestamps_list = [timestamps1, timestamps2]
         frequencies_list = [frequencies1, frequencies2]
@@ -160,7 +156,9 @@ class PolynomialMethod:
         area_list = []
 
         for i in range(2):
-            ax = fig.add_subplot(1, 3, i + 1)
+            if plot_result:
+                ax = fig.add_subplot(1, 3, i + 1)
+
             task = task_list[i]
             timestamps = timestamps_list[i]
             frequencies = frequencies_list[i]
