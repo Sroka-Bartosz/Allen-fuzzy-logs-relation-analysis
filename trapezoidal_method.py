@@ -5,9 +5,8 @@ import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import time
+import math
 from typing import Tuple, List, Any, Dict
-from logs_generator import generate_logs
 
 warnings.filterwarnings("ignore")
 
@@ -43,9 +42,9 @@ class TrapezoidMethod:
                                                     instance: str = None) -> None:
         is_first_task_logs = self.logs[self.task_column_name] == first_task
         is_second_task_logs = self.logs[self.task_column_name] == second_task
-        is_selected_instance = self.logs[self.instance_column_name] == instance if instance else True
+        is_selected_instance = (self.logs[self.instance_column_name] == instance) if instance else True
 
-        self.two_logs_dataframe = self.logs.loc[is_first_task_logs | is_second_task_logs & is_selected_instance]
+        self.two_logs_dataframe = self.logs.loc[(is_first_task_logs | is_second_task_logs) & is_selected_instance]
 
     def gets_tasks_names_in_time_relation(self) -> List[str]:
         # dodać funkcję sortującą taski w kolejności występowania
@@ -105,7 +104,7 @@ class TrapezoidMethod:
         D = (stats['mean_complete'] + stats['std_complete'], 0)
         return [A, B, C, D]
 
-    def calculate_timestamp_metrics(self, plot_result: bool = False):
+    def calculate_timestamp_metrics(self, plot_result: bool = False, is_big_dataframe: bool = False):
         first_task, second_task = self.gets_tasks_names_in_time_relation()
         task_stats = self.calculate_metrics()
 
@@ -113,7 +112,10 @@ class TrapezoidMethod:
         tasks_function_range = pd.date_range(self.minimum_start_timestamp, self.maximum_complete_timestamp, freq='D')
         for task in self.gets_tasks_names_in_time_relation():
             trapezoid_points = self.calculate_points(task_stats=task_stats, task=task)
-            function_of_trapezoid = generate_function(points=trapezoid_points)
+            if is_big_dataframe:
+                function_of_trapezoid = generate_big_function(points=trapezoid_points)
+            else:
+                function_of_trapezoid = generate_function(points=trapezoid_points)
             tasks_function_values[task] = [function_of_trapezoid(_) for _ in tasks_function_range]
 
         if plot_result:
@@ -141,15 +143,15 @@ class TrapezoidMethod:
         print("splot/task2:\033[1m {} % \033[0m".format(round(100 * area_splot / area_second_task), 2))
         print("")
 
-    def plot_task_duration(self, ax: plt.Axes, color: Any = 'r', label=''):
+    def plot_task_duration(self, df: pd.DataFrame, ax: plt.Axes, color: Any = 'r', label=''):
         """
         generating a plot of one task logs, like a line in time.
         """
-        for i in range(self.two_logs_dataframe.shape[0] - 1):
-            ax.plot([np.array(self.two_logs_dataframe[self.start_timestamp_column_name])[i],
-                     np.array(self.two_logs_dataframe[self.complete_timestamp_column_name])[i]],
-                    [np.array(self.two_logs_dataframe[self.case_id_column_name])[i],
-                     np.array(self.two_logs_dataframe[self.case_id_column_name])[i]], color=color, alpha=0.5,
+        for i in range(df.shape[0] - 1):
+            ax.plot([np.array(df[self.start_timestamp_column_name])[i],
+                     np.array(df[self.complete_timestamp_column_name])[i]],
+                    [np.array(df[self.case_id_column_name])[i],
+                     np.array(df[self.case_id_column_name])[i]], color=color, alpha=0.5,
                     label=label)
         ax.get_yaxis().set_visible(False)
         ax.set(xlim=[self.minimum_start_timestamp, self.maximum_complete_timestamp])
@@ -162,9 +164,42 @@ class TrapezoidMethod:
             colors = [generate_random_color() for _ in range(len(self.list_of_tasks))]
 
         fig, ax = plt.subplots(figsize=[14, 6])
-        for task_idx in range(len(self.gets_tasks_names_in_time_relation())):
-            self.plot_task_duration(ax=ax, color=colors[task_idx],
-                                    label=self.gets_tasks_names_in_time_relation()[task_idx])
+        list_of_tasks = list(self.gets_tasks_names_in_time_relation())
+        for task in list_of_tasks:
+            self.plot_task_duration(
+                df=self.two_logs_dataframe.loc[self.two_logs_dataframe[self.task_column_name] == task],
+                ax=ax,
+                color=colors[list_of_tasks.index(task)],
+                label=task)
+
+        handles, labels = ax.get_legend_handles_labels()
+        unique_labels = list(set(labels))
+        legend_handles = []
+        legend_labels = []
+        for label in unique_labels:
+            index = labels.index(label)
+            legend_handles.append(handles[index])
+            legend_labels.append(labels[index])
+        plt.legend(legend_handles, legend_labels)
+        plt.tight_layout()
+        plt.show()
+
+    def plot_all_tasks(self, colors: List = None):
+        """
+        generating plot_task_duration for two analyzed tasks
+        """
+        if not colors:
+            colors = [generate_random_color() for _ in range(len(self.list_of_tasks))]
+
+        fig, ax = plt.subplots(figsize=[14, 6])
+        list_of_tasks = list(self.list_of_tasks)
+        for task in list_of_tasks:
+            self.plot_task_duration(
+                df=self.logs.loc[self.logs[self.task_column_name] == task],
+                ax=ax,
+                color=colors[list_of_tasks.index(task)],
+                label=task)
+
         handles, labels = ax.get_legend_handles_labels()
         unique_labels = list(set(labels))
         legend_handles = []
@@ -183,14 +218,21 @@ class TrapezoidMethod:
                    instance: str = None,
                    plot_steps: bool = False,
                    plot_results: bool = False,
-                   print_results: bool = False):
+                   print_results: bool = False,
+                   is_big_dataframe: bool = False):
         self.prepare_dataframe_with_two_tasks_to_compare(first_task, second_task, instance)
         if plot_steps:
             self.plot_tasks(colors=['red', 'blue'])
         self.moved_logs_to_side()
         if plot_steps:
             self.plot_tasks(colors=['red', 'blue'])
-        area_first_task, area_second_task, area_splot = self.calculate_timestamp_metrics(plot_result=plot_results)
+        area_first_task, area_second_task, area_splot = self.calculate_timestamp_metrics(plot_result=plot_results,
+                                                                                         is_big_dataframe=is_big_dataframe)
+        if area_first_task == 0 or area_second_task == 0:
+            print(45 * "= ")
+            print("{0} area:\033[1m {1} \033[0m".format(first_task, round(area_first_task, 2)))
+            print("{0} area:\033[1m {1} \033[0m".format(second_task, round(area_second_task, 2)))
+            return []
         if print_results: self.print_results(area_first_task, area_second_task, area_splot)
         return return_possible_relation(area_splot / area_first_task, area_splot / area_second_task)
 
@@ -205,6 +247,24 @@ def generate_function(points):
             return points[1][1]
         elif points[2][0] <= x < points[3][0]:
             return (x - points[2][0]) * (points[3][1] - points[2][1]) / (points[3][0] - points[2][0]) + points[2][1]
+        else:
+            return 0
+
+    return function
+
+
+def generate_big_function(points):
+    def function(x):
+        if x < points[0][0]:
+            return 0
+        elif points[0][0] <= x < points[1][0]:
+            return (x - points[0][0]).total_seconds() * (points[1][1] - points[0][1]) / (
+                        points[1][0] - points[0][0]).total_seconds() + points[0][1]
+        elif points[1][0] <= x < points[2][0]:
+            return points[1][1]
+        elif points[2][0] <= x < points[3][0]:
+            return (x - points[2][0]).total_seconds() * (points[3][1] - points[2][1]) / (
+                        points[3][0] - points[2][0]).total_seconds() + points[2][1]
         else:
             return 0
 
