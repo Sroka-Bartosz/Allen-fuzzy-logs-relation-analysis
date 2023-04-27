@@ -13,9 +13,10 @@ Although the methods require further work, they represent an innovative approach
 
 ## Usage
 
-The project contains two main files, `vertical_logs_analyzer.py` and `relation_matrix.py`, which contain the three
-methods described above. In addition, the Jupyter notebook files contain calls and analyses of the methods. The
-file `method_times_comparison.jpynb` contains time analyses of the implemented methods.
+The project contains four main folders. The <b>src</b> folder contains files responsible for the algorithms' logic. The
+<b>logs</b> folder contains sample logs that can be loaded for analysis. In the <b>generator</b> directory, there is a
+simple code generator that implements basic Allen's relationships. The <b>analysis</b> folder contains conducted
+analyses and sample function calls.
 
 ## Authors
 
