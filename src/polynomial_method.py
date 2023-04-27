@@ -3,7 +3,6 @@
 
 # BUILT-IN PACKAGES
 import datetime as dt
-import warnings
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd

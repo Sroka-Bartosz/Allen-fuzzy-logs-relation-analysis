@@ -73,7 +73,7 @@ class AllenRelationsFinderNaiveMethod(abc.ABC):
                     founded_relations = pd.concat([founded_relations, founded_relation], axis=0, ignore_index=True)
 
         # export DataFrame to txt file
-        path = r'relations_occurence_rates.txt'
+        path = r'../relations_occurence_rates.txt'
         with open(path, 'w') as f:
             relations_occurence_rates_string = relations_occurence_rates_df.to_string(header=False, index=False)
             f.write(relations_occurence_rates_string)
@@ -166,7 +166,7 @@ class AllenRelationsFinderNaiveMethodWithLimitedRelations(abc.ABC):
                     founded_relations = pd.concat([founded_relations, founded_relation], axis=0, ignore_index=True)
 
         # export DataFrame to txt file
-        path = r'relations_occurence_rates.txt'
+        path = r'../relations_occurence_rates.txt'
         with open(path, 'w') as f:
             relations_occurence_rates_string = relations_occurence_rates_df.to_string(header=False, index=False)
             f.write(relations_occurence_rates_string)

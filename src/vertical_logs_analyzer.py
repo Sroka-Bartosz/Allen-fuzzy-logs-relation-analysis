@@ -1,14 +1,13 @@
 import datetime as dt
-from datetime import datetime
-import random
-import warnings
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 import numpy as np
 import pandas as pd
-import scipy
 from scipy.interpolate import CubicSpline
-from matplotlib.patches import Rectangle
-from typing import Tuple, List, Any, Dict
+import scipy
+import random
+from typing import Any, Dict, List, Tuple
+import warnings
 
 warnings.filterwarnings("ignore")
 
@@ -52,8 +51,8 @@ class VerticalLogsAnalyzer:
         self.number_of_traces: Dict[Any] = self.logs.groupby([self.task_column_name]).count().iloc[:, 0].to_dict()
 
         # Calculate the range of timestamps in the logs dataframe.
-        self.minimum_start_timestamp: datetime = self.logs[self.start_timestamp_column_name].min()
-        self.maximum_complete_timestamp: datetime = self.logs[self.complete_timestamp_column_name].max()
+        self.minimum_start_timestamp: dt.datetime = self.logs[self.start_timestamp_column_name].min()
+        self.maximum_complete_timestamp: dt.datetime = self.logs[self.complete_timestamp_column_name].max()
 
     def select_data_for_analyze(self,
                                 first_task: str,
