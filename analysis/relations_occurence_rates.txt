@@ -1,0 +1,64 @@
+check if sufficient information is available check if sufficient information is available                                                                      {'=': 1.0}
+check if sufficient information is available                               register claim                           {'si': 0.08633093525179857, 'mi': 0.9136690647482014}
+check if sufficient information is available                determine likelihood of claim                                                                              {}
+check if sufficient information is available                                 assess claim                                                                              {}
+check if sufficient information is available                             initiate payment                                                                              {}
+check if sufficient information is available             advise claimant on reimbursement                                                                              {}
+check if sufficient information is available                                  close claim                                                                              {}
+check if sufficient information is available                                          end                                                                     {'mi': 1.0}
+                              register claim check if sufficient information is available                            {'m': 0.9136690647482014, 'si': 0.08633093525179857}
+                              register claim                               register claim                                                                      {'=': 1.0}
+                              register claim                determine likelihood of claim                                                                     {'mi': 1.0}
+                              register claim                                 assess claim                                                                     {'mi': 1.0}
+                              register claim                             initiate payment                                                                              {}
+                              register claim             advise claimant on reimbursement                                                                              {}
+                              register claim                                  close claim                                                                              {}
+                              register claim                                          end                                                                              {}
+               determine likelihood of claim check if sufficient information is available                                                                              {}
+               determine likelihood of claim                               register claim                                                                      {'m': 1.0}
+               determine likelihood of claim                determine likelihood of claim                                                                      {'=': 1.0}
+               determine likelihood of claim                                 assess claim                           {'si': 0.10569105691056911, 'mi': 0.8943089430894309}
+               determine likelihood of claim                             initiate payment                                                                              {}
+               determine likelihood of claim             advise claimant on reimbursement                                                                      {'>': 1.0}
+               determine likelihood of claim                                  close claim                                                                              {}
+               determine likelihood of claim                                          end                                                                     {'mi': 1.0}
+                                assess claim check if sufficient information is available                                                                              {}
+                                assess claim                               register claim                                                                      {'m': 1.0}
+                                assess claim                determine likelihood of claim                            {'m': 0.8943089430894309, 'si': 0.10569105691056911}
+                                assess claim                                 assess claim                                                                      {'=': 1.0}
+                                assess claim                             initiate payment                                                                     {'mi': 1.0}
+                                assess claim             advise claimant on reimbursement                                                                     {'mi': 1.0}
+                                assess claim                                  close claim                                                                              {}
+                                assess claim                                          end                                                                     {'mi': 1.0}
+                            initiate payment check if sufficient information is available                                                                              {}
+                            initiate payment                               register claim                                                                              {}
+                            initiate payment                determine likelihood of claim                                                                              {}
+                            initiate payment                                 assess claim                                                                      {'m': 1.0}
+                            initiate payment                             initiate payment                                                                      {'=': 1.0}
+                            initiate payment             advise claimant on reimbursement                                                         {'m': 0.75, 'mi': 0.25}
+                            initiate payment                                  close claim                                                                     {'mi': 1.0}
+                            initiate payment                                          end                                                                              {}
+            advise claimant on reimbursement check if sufficient information is available                                                                              {}
+            advise claimant on reimbursement                               register claim                                                                              {}
+            advise claimant on reimbursement                determine likelihood of claim                                                                      {'<': 1.0}
+            advise claimant on reimbursement                                 assess claim                                                                      {'m': 1.0}
+            advise claimant on reimbursement                             initiate payment                                                         {'m': 0.25, 'mi': 0.75}
+            advise claimant on reimbursement             advise claimant on reimbursement                                                                      {'=': 1.0}
+            advise claimant on reimbursement                                  close claim               {'m': 0.46153846153846156, 'si': 0.25, 'mi': 0.28846153846153844}
+            advise claimant on reimbursement                                          end                                                                     {'mi': 1.0}
+                                 close claim check if sufficient information is available                                                                              {}
+                                 close claim                               register claim                                                                              {}
+                                 close claim                determine likelihood of claim                                                                              {}
+                                 close claim                                 assess claim                                                                              {}
+                                 close claim                             initiate payment                                                                      {'m': 1.0}
+                                 close claim             advise claimant on reimbursement               {'m': 0.28846153846153844, 'si': 0.25, 'mi': 0.46153846153846156}
+                                 close claim                                  close claim                                                                      {'=': 1.0}
+                                 close claim                                          end {'>': 0.011363636363636364, 'm': 0.13636363636363635, 'mi': 0.8522727272727273}
+                                         end check if sufficient information is available                                                                      {'m': 1.0}
+                                         end                               register claim                                                                              {}
+                                         end                determine likelihood of claim                                                                      {'m': 1.0}
+                                         end                                 assess claim                                                                      {'m': 1.0}
+                                         end                             initiate payment                                                                              {}
+                                         end             advise claimant on reimbursement                                                                      {'m': 1.0}
+                                         end                                  close claim {'m': 0.8522727272727273, '<': 0.011363636363636364, 'mi': 0.13636363636363635}
+                                         end                                          end                                                           {'m': 0.5, 'mi': 0.5}
